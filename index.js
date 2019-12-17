@@ -21,6 +21,7 @@ const GREEN_TINT = 0x339cff;
 const RED_TINT = 0xff3368;
 const GOLDEN_TINT = 0xfcff33;
 const BLACK_TINT = 0x000000;
+const PURPLE_TINT = 0x9700ff;
 
 var background_sound, jump_sound, collectStar_sound, death_sound;
 var game = new Phaser.Game(config);
@@ -293,7 +294,8 @@ function createBomb (Player)
     var bomb = bombs.create(x, y, 'bomb');
     bomb.setDisplaySize(20,20);
     bomb.body.allowGravity = false;
-    bomb.setBounce(0.9);
+    bomb.setBounceX(0.9);
+    bomb.setBounceY(1);
     bomb.setCollideWorldBounds(true);
     bomb.setVelocity(Phaser.Math.RND.sign()*Phaser.Math.RND.integerInRange(100,200));
     if(GOD_MODE){
@@ -329,7 +331,7 @@ function createSpecialStar ()
         case 1:
             if(!SLOW_TIME)
             {
-                specialStar.setTint(GREEN_TINT);
+                specialStar.setTint(PURPLE_TINT);
                 specialStar.setData("powerUp","SLOW_TIME");
             }
         break;
