@@ -38,6 +38,7 @@ var JUMP_TIMER = 0;
 var specialStarTimer;
 var GOD_MODE = false;
 var SLOW_TIME = false;
+var SUPER_STAR = false;
 
 // preloads the assets with key-value pairing
 function preload ()
@@ -207,6 +208,7 @@ function create ()
         loop: true
     });
     specialStarTimer.paused = false;
+    SUPER_STAR = false;
 }
 
 function worldCollideCallback (gameObject, up, down, left, right)
@@ -255,13 +257,15 @@ function collectStar (player, star)
         specialStarTimer.paused = true;
         slowTime(this);
     }
-
-    if (star.getData("powerUp") === "SUPER_STAR")
+    else if (star.getData("powerUp") === "SUPER_STAR")
     {
+        SUPER_STAR = false;
         score += 20;
     }
+    else{
+        score += 10;
+    }
 
-    score += 10;
     scoreText.setText('Score: ' + score + '\tLast Score: ' + previousScore + '\tGlobal Highscore: ' + globalScore);
 
     // level over
@@ -343,9 +347,13 @@ function createSpecialStar ()
             }
         break;
         case 3:
-            specialStar.setTint(BLACK_TINT);
-            specialStar.setData("powerUp","SUPER_STAR");
-            specialStar.setVelocity(Phaser.Math.RND.sign()*300);
+            if(!SUPER_STAR)
+            {
+                specialStar.setTint(BLACK_TINT);
+                specialStar.setData("powerUp","SUPER_STAR");
+                specialStar.setVelocity(Phaser.Math.RND.sign()*300);
+                SUPER_STAR = true;
+            }
         break;
     }
 
@@ -361,6 +369,10 @@ function createSpecialStar ()
         onComplete: function() {
             tween.remove();
             specialStar.disableBody(true,true);
+            if(SUPER_STAR)
+            {
+                SUPER_STAR = false;
+            }
         },
         onCompleteScope: this
     });
